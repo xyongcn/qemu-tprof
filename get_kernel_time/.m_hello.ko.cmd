@@ -1,0 +1,1 @@
+cmd_/root/new/kernel_timer/get_kernel_time/m_hello.ko := ld -r -m elf_i386 -T /root/new/linux-3.5.4/scripts/module-common.lds --build-id  -o /root/new/kernel_timer/get_kernel_time/m_hello.ko /root/new/kernel_timer/get_kernel_time/m_hello.o /root/new/kernel_timer/get_kernel_time/m_hello.mod.o
