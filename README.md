@@ -11,4 +11,4 @@ Project objective
  
 Useful links
 ============
- 1. todo...
+ 1. https://github.com/xyongcn/qemu-tprof/blob/master/%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C.txt
