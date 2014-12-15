@@ -1,0 +1,143 @@
+﻿测试用例：
+================
+1.tsc10ms
+2.tsc100ms
+3.tsc1s
+
+4.walltime10ms
+5.walltime100ms
+6.walltime1s
+
+
+测试场景：
+============
+1.真实机器              #误差几乎为0还没有测试。
+
+模拟环境不加跟踪
+-------------- 
+2.-rtc clock=host  
+3.-rtc clock=rt     
+4.-rtc clock=vm  -icount shift=1,align=off 
+5.-rtc clock=vm  -icount shift=4,align=off  
+6.-rtc clock=vm  -icount shift=7,align=off 
+
+
+模拟环境加上跟踪
+------------------
+7. -rtc clock=host                              -d inasm,exec  -D ./log.log     #目前进行到这里了字符界面没法启动起来
+8. -rtc clock=rt                                -d inasm,exec  -D ./log.log
+9. -rtc clock=vm  -icount shift=1,align=off     -d inasm,exec  -D ./log.log
+10.-rtc clock=vm  -icount shift=4,align=off     -d inasm,exec  -D ./log.log
+11.-rtc clock=vm  -icount shift=7,align=off     -d inasm,exec  -D ./log.log
+
+
+一共66组数据
+
+
+#数据示例
+myming@ubuntu-xyong:~/qemu-tprof/tsc100ms$ ls -1
+c_tsc
+c_tsc.c             #测试用例
+c_tsc_host.txt      #-rtc clock=host  测试场景测试结果
+c_tsc_host.txt_diff #上述结果的各个相邻时间差值与时间差值的平均值的百分比。第一行为时间差值的均值。由./time_diff_tsc.py  < c_tsc_host.txt  >c_tsc_host.txt_diff生成
+c_tsc_rt.txt
+c_tsc_rt.txt_diff
+c_tsc_vm_icount1.txt
+c_tsc_vm_icount1.txt_diff
+c_tsc_vm_icount4.txt
+c_tsc_vm_icount4.txt_diff
+c_tsc_vm_icount7.txt
+c_tsc_vm_icount7.txt_diff
+
+
+time_process目录存放数据处理程序
+matlab目录存放测试结果画图程序及生成的图
+
+
+
+
+
+测试结果
+===================
+1.
+matlab/tsc10ms.png误差百分比分布图
+
+myming@ubuntu-xyong:~/qemu-tprof/tsc10ms$ grep mean *.txt_diff        #tsc10ms测试用例
+c_tsc_host.txt_diff:      mean value: 19988345.623116                   #-rtc clock=host  测试场景
+c_tsc_rt.txt_diff:        mean value: 19985470.899497                   #-rtc clock=rt    测试场景
+c_tsc_vm_icount1.txt_diff:mean value:  9999988.944724                   #-rtc clock=vm  -icount shift=1,align=off  测试场景
+c_tsc_vm_icount4.txt_diff:mean value:  9999954.251256                   #-rtc clock=vm  -icount shift=4,align=off  测试场景 
+c_tsc_vm_icount7.txt_diff:mean value:  9991595.738693                   #-rtc clock=vm  -icount shift=7,align=off  测试场景
+
+-rtc clock=host和-rtc clock=rt的均值是-rtc clock=vm  -icount shift=n,align=off 的两倍
+
+2.
+matlab/tsc100ms.png误差百分比分布图
+
+myming@ubuntu-xyong:~/qemu-tprof/tsc100ms$ grep mean *.txt_diff       #tsc100ms测试用例
+c_tsc_host.txt_diff:      mean value: 199905384.025126
+c_tsc_rt.txt_diff:        mean value: 199878349.085427
+c_tsc_vm_icount1.txt_diff:mean value:  99999469.748744
+c_tsc_vm_icount4.txt_diff:mean value:  99999546.050251
+c_tsc_vm_icount7.txt_diff:mean value: 100512001.286432
+
+-rtc clock=host和-rtc clock=rt的均值是-rtc clock=vm  -icount shift=n,align=off 的两倍
+
+3.
+matlab/tsc1s.png误差百分比分布图
+
+myming@ubuntu-xyong:~/qemu-tprof/tsc1s$ grep mean *.txt_diff          #tsc1s测试用例
+c_tsc_host.txt_diff:      mean value: 1999063254.291457
+c_tsc_rt.txt_diff:        mean value: 1999152479.045226
+c_tsc_vm_icount1.txt_diff:mean value:  999994443.798995
+c_tsc_vm_icount4.txt_diff:mean value:  999995397.949749
+c_tsc_vm_icount7.txt_diff:mean value: 1000076152.281407
+
+
+
+-rtc clock=host和-rtc clock=rt的均值是-rtc clock=vm  -icount shift=n,align=off 的两倍
+
+===========================
+4.
+matlab/walltime10ms.png误差百分比分布图
+
+myming@ubuntu-xyong:~/qemu-tprof/walltime10ms$ grep mean *.txt_diff       #walltime10ms测试用例
+c_walltime_host.txt_diff:      mean value: 9997.462312
+c_walltime_rt.txt_diff:        mean value: 9998.316583
+c_walltime_vm_icount1.txt_diff:mean value: 9999.979899
+c_walltime_vm_icount4.txt_diff:mean value: 9999.839196
+c_walltime_vm_icount7.txt_diff:mean value: 9998.954774
+
+
+-rtc clock=host和-rtc clock=rt的均值与-rtc clock=vm  -icount shift=n,align=off 的几乎相同
+
+5.
+matlab/walltime100ms.png误差百分比分布图
+
+myming@ubuntu-xyong:~/qemu-tprof/walltime100ms$ grep mean *.txt_diff      #walltime100ms测试用例
+c_walltime_host.txt_diff:      mean value: 99998.643216
+c_walltime_rt.txt_diff:        mean value: 99998.829146
+c_walltime_vm_icount1.txt_diff:mean value: 99999.979899
+c_walltime_vm_icount4.txt_diff:mean value: 99999.854271
+c_walltime_vm_icount7.txt_diff:mean value: 99996.110553
+
+-rtc clock=host和-rtc clock=rt的均值与-rtc clock=vm  -icount shift=n,align=off 的几乎相同
+
+
+6.
+matlab/walltime1s.png误差百分比分布图
+
+myming@ubuntu-xyong:~/qemu-tprof/walltime1s$ grep mean *.txt_diff          #walltime1s测试用例
+c_walltime_host.txt_diff:      mean value: 1005022.417085
+c_walltime_rt.txt_diff:        mean value: 1005023.331658
+c_walltime_vm_icount1.txt_diff:mean value:  999999.984925
+c_walltime_vm_icount4.txt_diff:mean value:  999999.849246
+c_walltime_vm_icount7.txt_diff:mean value:  999998.748744
+
+-rtc clock=host和-rtc clock=rt的均值与-rtc clock=vm  -icount shift=n,align=off 的几乎相同
+
+
+结论：
+由10ms,100ms,到1ms
+tsc和walltime的误差百分比浮动范围逐渐增大。-%1.5到+1.5%   -%20到+20%   -%40到+40%
+定时间隔越短定时越不精确。

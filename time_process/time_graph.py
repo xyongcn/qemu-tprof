@@ -3,6 +3,7 @@ import sys
 
 log=sys.stdin
 
+log.readline()
 
 while True:
     line=log.readline()
